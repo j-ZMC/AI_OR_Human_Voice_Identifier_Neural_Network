@@ -124,3 +124,24 @@ def detect_turns_from_wav(wav_bytes):
             turns.append({"channel": channel, "start": start, "end": end})
 
     return sorted(turns, key=lambda t: t["start"])
+
+
+def extract_channel_audio(audio, turns, sample_rate, channel=0):
+    """Concatena el audio hablado de un canal usando los turnos detectados."""
+    audio = np.asarray(audio)
+    if audio.ndim != 2 or channel < 0 or channel >= audio.shape[1]:
+        raise ValueError("el audio debe ser una matriz con el canal solicitado")
+
+    chunks = []
+    n_samples = len(audio)
+    for turn in turns:
+        if turn["channel"] != channel:
+            continue
+        start = max(0, min(n_samples, int(round(float(turn["start"]) * sample_rate))))
+        end = max(start, min(n_samples, int(round(float(turn["end"]) * sample_rate))))
+        if end > start:
+            chunks.append(audio[start:end, channel])
+
+    if not chunks:
+        return audio[:, channel].astype(np.float32, copy=False)
+    return np.concatenate(chunks).astype(np.float32, copy=False)

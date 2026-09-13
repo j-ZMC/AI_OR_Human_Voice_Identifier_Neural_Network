@@ -53,3 +53,20 @@ turnos no puede hacerlo y usa `0.5` como valor neutro para esas dos columnas.
 Si un CSV solo contiene las 5 estadisticas de reaccion, selecciona
 automaticamente `models/time_predict/model.pt` porque no puede reconstruir las
 24 caracteristicas necesarias para el segundo nodo base.
+
+## Endpoint del reto
+
+El servidor recibe el WAV estereo completo, detecta los turnos de ambos
+canales y ejecuta el random forest con el audio del caller:
+
+```powershell
+c:/Users/jesus/anaconda3/envs/faiss_env/python.exe -m pip install -r nexus/requirements-endpoint.txt
+c:/Users/jesus/anaconda3/envs/faiss_env/python.exe -m uvicorn app:app --app-dir nexus --host 0.0.0.0 --port 8000
+```
+
+La ruta del juez es `POST http://localhost:8000/detect`. Para validarla desde
+la raiz del workspace:
+
+```powershell
+c:/Users/jesus/anaconda3/envs/faiss_env/python.exe hackmty26/scripts/check_endpoint.py --url http://localhost:8000/detect --manifest hackmty26/manifest.csv --audio-dir altur-challenge-audio/audio --split val --n 20
+```

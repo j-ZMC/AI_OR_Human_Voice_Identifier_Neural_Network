@@ -2,13 +2,32 @@ import csv
 import os
 
 import joblib
+import numpy as np
 import pandas as pd
 import pytest
 
+from audio_features import extract_channel_audio
 from features import extract_features, extract_turn_features, load_turns, merge_turns
 from predict import predict_call
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+TURNS_DIR = os.path.join(os.path.dirname(ROOT), "hackmty26", "turns")
+
+
+def test_extract_channel_audio_concatenates_only_requested_turns():
+    audio = np.arange(20, dtype=np.float32).reshape(10, 2)
+    turns = [
+        {"channel": 1, "start": 0.0, "end": 2.0},
+        {"channel": 0, "start": 1.0, "end": 3.0},
+        {"channel": 0, "start": 4.0, "end": 5.0},
+    ]
+
+    extracted = extract_channel_audio(audio, turns, sample_rate=2, channel=0)
+
+    np.testing.assert_array_equal(
+        extracted,
+        np.array([4, 6, 8, 10, 16, 18], dtype=np.float32),
+    )
 
 
 # ---------- features.py ----------
@@ -181,7 +200,7 @@ def test_manifest_split_is_roughly_80_20(manifest_rows):
 
 def test_all_manifest_turns_files_exist(manifest_rows):
     for row in manifest_rows:
-        path = os.path.join(ROOT, "turns", f"{row['anon_id']}.json")
+        path = os.path.join(TURNS_DIR, f"{row['anon_id']}.json")
         assert os.path.exists(path), f"falta {path}"
 
 
@@ -196,7 +215,7 @@ def test_turn_level_dataset_has_no_call_leakage_across_split(manifest_rows):
     # con turnos en train Y en val. Esto verifica que NO pasa.
     train_ids, val_ids = set(), set()
     for row in manifest_rows:
-        turns = load_turns(os.path.join(ROOT, "turns", f"{row['anon_id']}.json"))
+        turns = load_turns(os.path.join(TURNS_DIR, f"{row['anon_id']}.json"))
         if not extract_turn_features(turns):
             continue
         (train_ids if row["split"] == "train" else val_ids).add(row["anon_id"])
@@ -211,12 +230,12 @@ def model_bundle():
 
 
 def test_predict_call_confidence_is_a_valid_probability(model_bundle):
-    result = predict_call(os.path.join(ROOT, "turns", "call_0181ce113ebe.json"), model_bundle=model_bundle)
+    result = predict_call(os.path.join(TURNS_DIR, "call_0181ce113ebe.json"), model_bundle=model_bundle)
     assert 0.0 <= result["confidence"] <= 1.0
 
 
 def test_predict_call_label_matches_confidence_threshold(model_bundle):
-    result = predict_call(os.path.join(ROOT, "turns", "call_0181ce113ebe.json"), model_bundle=model_bundle)
+    result = predict_call(os.path.join(TURNS_DIR, "call_0181ce113ebe.json"), model_bundle=model_bundle)
     expected_label = "synthetic" if result["confidence"] > 0.5 else "human"
     assert result["label"] == expected_label
 
@@ -232,7 +251,7 @@ def test_predict_call_uses_saved_feature_order(model_bundle):
 def test_predict_call_matches_manual_aggregation(model_bundle):
     import numpy as np
 
-    turns_path = os.path.join(ROOT, "turns", "call_0181ce113ebe.json")
+    turns_path = os.path.join(TURNS_DIR, "call_0181ce113ebe.json")
     turns = load_turns(turns_path)
     reaction_times = np.array([r["reaction_time"] for r in extract_turn_features(turns)])
 
@@ -258,7 +277,7 @@ def test_batch_accuracy_on_val_set_matches_expected_range(model_bundle):
     correct = 0
     for row in rows:
         result = predict_call(
-            os.path.join(ROOT, "turns", f"{row['anon_id']}.json"), model_bundle=model_bundle
+            os.path.join(TURNS_DIR, f"{row['anon_id']}.json"), model_bundle=model_bundle
         )
         correct += result["label"] == row["label"]
 

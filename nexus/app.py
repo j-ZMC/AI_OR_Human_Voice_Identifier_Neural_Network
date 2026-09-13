@@ -1,6 +1,6 @@
 import base64
 import io
-from pathlib import Path
+from contextlib import asynccontextmanager
 from typing import Literal, Optional
 
 from fastapi import FastAPI, HTTPException, Request
@@ -9,23 +9,30 @@ from fastapi.responses import JSONResponse
 import soundfile as sf
 from pydantic import BaseModel, Field
 
-from audio_features import detect_turns_from_wav
+from audio_features import detect_turns_from_wav, extract_channel_audio
 from predict import RANDOM_FOREST_PATH, load_model as load_saved_model
 from predict import predict_from_turns
-
-app = FastAPI(
-    title="Altur Challenge - Caller Detector",
-    description="Clasifica si el caller de una llamada bancaria es humano o sintetico, a partir de los tiempos de habla.",
-)
 
 MODEL_BUNDLE = None
 MODEL_PATH = RANDOM_FOREST_PATH
 
 
-@app.on_event("startup")
 def load_model():
     global MODEL_BUNDLE
     MODEL_BUNDLE = load_saved_model(MODEL_PATH if MODEL_PATH.exists() else None)
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    load_model()
+    yield
+
+
+app = FastAPI(
+    title="Altur Challenge - Caller Detector",
+    description="Clasifica si el caller de una llamada bancaria es humano o sintetico, a partir de los tiempos de habla.",
+    lifespan=lifespan,
+)
 
 
 class Turn(BaseModel):
@@ -104,10 +111,11 @@ def detect(req: DetectRequest):
             dtype="float32",
             always_2d=True,
         )
+        caller_audio = extract_channel_audio(audio, turns, sample_rate, channel=0)
         result = predict_from_turns(
             turns,
             model_bundle=MODEL_BUNDLE,
-            acoustic_audio=audio[:, 0],
+            acoustic_audio=caller_audio,
             acoustic_sample_rate=sample_rate,
         )
         is_synthetic = result["label"] == "synthetic"
