@@ -15,7 +15,6 @@ resultados_audio/dataset_mel_imagenes/
 resultados_audio/inferencia/
 
 # Generated model outputs and caches
-nexus/acoustic_predictions.csv
 
 # Temporary reports
 *.log
