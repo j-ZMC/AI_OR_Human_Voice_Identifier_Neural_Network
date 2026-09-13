@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "models_root": "nexus/models",
+  "models": [
+    {
+      "id": "time_predict",
+      "kind": "torch_binary_classifier",
+      "model": "time_predict/model.pt",
+      "normalization": "time_predict/normalization.json",
+      "feature_cols": [
+        "reaction_mean",
+        "reaction_std",
+        "reaction_min",
+        "reaction_max",
+        "reaction_median"
+      ],
+      "output": "synthetic_probability"
+    },
+    {
+      "id": "sustantive_predict",
+      "kind": "torch_binary_classifier",
+      "model": "sustantive_predict/model.pt",
+      "normalization": "sustantive_predict/normalization.json",
+      "feature_cols": [
+        "reaction_mean",
+        "reaction_std",
+        "reaction_min",
+        "reaction_max",
+        "reaction_median",
+        "agent_reaction_mean",
+        "agent_reaction_std",
+        "agent_reaction_min",
+        "agent_reaction_max",
+        "agent_reaction_median",
+        "caller_turn_dur_mean",
+        "caller_turn_dur_std",
+        "caller_turn_dur_min",
+        "caller_turn_dur_max",
+        "caller_turn_dur_median",
+        "agent_turn_dur_mean",
+        "agent_turn_dur_std",
+        "agent_turn_dur_min",
+        "agent_turn_dur_max",
+        "agent_turn_dur_median",
+        "n_turns_caller",
+        "n_turns_agent",
+        "overlap_count",
+        "overlap_ratio"
+      ],
+      "output": "synthetic_probability"
+    },
+    {
+      "id": "best_model",
+      "kind": "torch_alias",
+      "model": "best_model/model.pt",
+      "normalization": "best_model/normalization.json",
+      "source_model": "sustantive_predict",
+      "feature_cols": [
+        "reaction_mean",
+        "reaction_std",
+        "reaction_min",
+        "reaction_max",
+        "reaction_median",
+        "agent_reaction_mean",
+        "agent_reaction_std",
+        "agent_reaction_min",
+        "agent_reaction_max",
+        "agent_reaction_median",
+        "caller_turn_dur_mean",
+        "caller_turn_dur_std",
+        "caller_turn_dur_min",
+        "caller_turn_dur_max",
+        "caller_turn_dur_median",
+        "agent_turn_dur_mean",
+        "agent_turn_dur_std",
+        "agent_turn_dur_min",
+        "agent_turn_dur_max",
+        "agent_turn_dur_median",
+        "n_turns_caller",
+        "n_turns_agent",
+        "overlap_count",
+        "overlap_ratio"
+      ],
+      "output": "synthetic_probability"
+    },
+    {
+      "id": "legacy_model",
+      "kind": "sklearn_pipeline",
+      "model": "legacy_model/model.joblib",
+      "normalization": "legacy_model/normalization.json",
+      "feature_cols": [
+        "reaction_mean",
+        "reaction_std",
+        "reaction_min",
+        "reaction_max",
+        "reaction_median"
+      ],
+      "output": "synthetic_probability"
+    },
+    {
+      "id": "random_forest",
+      "kind": "custom_random_forest",
+      "model": "random_forest/model.joblib",
+      "normalization": "random_forest/normalization.json",
+      "inputs": [
+        "time_predict",
+        "sustantive_predict",
+        "mini_ast_predict",
+        "wav2vec_predict"
+      ],
+      "feature_cols": [
+        "time_predict_probability",
+        "sustantive_predict_probability",
+        "mini_ast_probability",
+        "wav2vec_probability"
+      ],
+      "output": "synthetic_probability"
+    }
+  ],
+  "future_nodes": [
+    {
+      "id": "decision_tree",
+      "status": "planned",
+      "inputs": [
+        "time_predict",
+        "sustantive_predict"
+      ]
+    }
+  ],
+  "default_model": "random_forest"
+}

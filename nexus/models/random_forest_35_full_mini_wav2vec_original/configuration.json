@@ -1,0 +1,28 @@
+{
+  "model": "nexus/models/random_forest_35_full_mini_wav2vec_original/model.joblib",
+  "n_trees": 35,
+  "min_samples_split": 5,
+  "max_depth": 4,
+  "random_state": 42,
+  "features": [
+    "time_predict_probability",
+    "sustantive_predict_probability",
+    "mini_ast_probability",
+    "wav2vec_probability"
+  ],
+  "mini_ast_checkpoint": "resultados_audio/mini_ast_best.pt",
+  "wav2vec_checkpoint": "wav2vec2_finetuned_model_run",
+  "time_predict_checkpoint": "nexus/retrain_lr075_time150_sub210/models/time_predict/model.pt",
+  "sustantive_predict_checkpoint": "nexus/retrain_lr075_time150_sub210/models/sustantive_predict/model.pt",
+  "wav2vec_window_seconds": 8.0,
+  "wav2vec_window_position": "center",
+  "mini_ast_window_seconds": 4.0,
+  "evaluation": {
+    "n_trees": 35,
+    "val_auc": 1.0,
+    "val_accuracy": 1.0,
+    "channel1_n": 353,
+    "channel1_synthetic_rate": 1.0,
+    "channel1_false_negatives": 0
+  }
+}

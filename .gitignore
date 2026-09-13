@@ -14,16 +14,8 @@ hackmty26/turns/
 resultados_audio/dataset_mel_imagenes/
 resultados_audio/inferencia/
 
-# Large model weights and local checkpoints
-*.safetensors
-*.bin
-wav2vec2_finetuned_model_*/
-nexus/retrain_*/
-
 # Generated model outputs and caches
 nexus/acoustic_predictions.csv
-nexus/models/
-resultados_audio/*.pt
 
 # Temporary reports
 *.log

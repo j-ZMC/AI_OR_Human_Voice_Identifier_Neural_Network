@@ -1,0 +1,25 @@
+{
+  "format": "nexus-normalizer-v1",
+  "method": "not_required",
+  "fit_split": "train",
+  "model_key": "random_forest_35_full_mini_wav2vec_original",
+  "source_format": "custom_random_forest",
+  "feature_cols": [
+    "time_predict_probability",
+    "sustantive_predict_probability",
+    "mini_ast_probability",
+    "wav2vec_probability"
+  ],
+  "mean": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ]
+}

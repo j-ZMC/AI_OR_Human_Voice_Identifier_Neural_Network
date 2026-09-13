@@ -1,0 +1,28 @@
+{
+  "format": "nexus-normalizer-v1",
+  "method": "standard_score",
+  "fit_split": "train",
+  "model_key": "time_predict",
+  "source_format": "torch",
+  "feature_cols": [
+    "reaction_mean",
+    "reaction_std",
+    "reaction_min",
+    "reaction_max",
+    "reaction_median"
+  ],
+  "mean": [
+    1.3657574653625488,
+    2.036989688873291,
+    -3.278085231781006,
+    4.932198524475098,
+    1.7028014659881592
+  ],
+  "scale": [
+    1.1028821468353271,
+    1.147526741027832,
+    3.917973518371582,
+    2.810209035873413,
+    0.9942720532417297
+  ]
+}

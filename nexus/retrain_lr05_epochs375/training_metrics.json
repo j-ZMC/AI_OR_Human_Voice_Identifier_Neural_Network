@@ -1,0 +1,40 @@
+{
+  "best_model": "sustantive_predict",
+  "epochs": 375,
+  "learning_rate": 0.0005,
+  "models": {
+    "time_predict": {
+      "file": "models/time_predict/model.pt",
+      "epoch": 160,
+      "metrics": {
+        "train_loss": 0.41987326741218567,
+        "train_accuracy": 0.851063829787234,
+        "val_loss": 0.4605894088745117,
+        "val_auc": 0.9165341812400636,
+        "val_accuracy": 0.8732394366197183
+      }
+    },
+    "sustantive_predict": {
+      "file": "models/sustantive_predict/model.pt",
+      "epoch": 234,
+      "metrics": {
+        "train_loss": 0.07629198580980301,
+        "train_accuracy": 0.9787234042553191,
+        "val_loss": 0.222493514418602,
+        "val_auc": 0.9634340222575517,
+        "val_accuracy": 0.9154929577464789
+      }
+    }
+  },
+  "default_model": "random_forest",
+  "random_forest": {
+    "val_auc": 1.0,
+    "val_accuracy": 1.0,
+    "n_trees": 30,
+    "n_train": 282,
+    "n_val": 71,
+    "stacking": "5-fold out-of-fold base predictions",
+    "fold_epochs": 150,
+    "fold_learning_rate": 0.0005
+  }
+}
