@@ -1,6 +1,8 @@
 # LFant
 
-## HackMTY 2026 Neural Nexus
+## Track Altur | HackMTY 2026
+
+### Equipo Neural Nexus
 
 Sistema de clasificacion de llamadas bancarias que estima si la persona que
 habla como caller es **humana** o **sintetica**. El proyecto combina señales de
