@@ -545,3 +545,9 @@ respuesta debe contener siempre un booleano `is_synthetic`.
   de HackMTY 2026.
 - El nodo `decision_tree` aparece en el registro como trabajo futuro; no forma
   parte de la prediccion actual.
+
+## Equipo
+- [@jgerr08](https://github.com/jgerr08) - [Reclutador del equipo y desarrollador del modelo de predicción de tiempo de reacción.]
+- [@j-ZMC](https://github.com/j-ZMC) — [su rol]
+- [@Red-Ninja74](https://github.com/Red-Ninja74) — [su rol]
+- [@LuisACastellanosA](https://github.com/LuisACastellanosA) — [su rol]
