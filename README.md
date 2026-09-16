@@ -2,7 +2,7 @@
 
 ## Track Altur | HackMTY 2026
 
-### Equipo Neural Nexus
+### Team Neural Nexus
 
 A banking-call classification system that estimates whether the caller is
 **human** or **synthetic**. The project combines conversational signals, such
