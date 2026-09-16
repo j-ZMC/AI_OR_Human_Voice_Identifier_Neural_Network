@@ -565,8 +565,7 @@ response must contain a boolean `is_synthetic`.
   caller-disjoint validation, and leakage-free out-of-fold stacking. Also
   reorganized the project information and documented the feature extraction,
   model contracts, inference flow, API, deployment, validation, and retraining
-  process. Owned the rest of the repository work outside the two original
-  conversational predictors.
+  process. 
 - [@jgerr08](https://github.com/jgerr08) - Team recruiter and developer of the
   reaction-time prediction model.
 - [@Red-Ninja74](https://github.com/Red-Ninja74) - Team member and contributor to
